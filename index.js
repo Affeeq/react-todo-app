@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = require("./routes");
+const path = require("path");
 
 // DB_URl = online db url
 const dbUrl = process.env.DB_URL;
