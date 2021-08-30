@@ -22,6 +22,13 @@ app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use("/api", router);
 
+app.use(express.static(path.join(__dirname, "client", "build")));
+
+app.get("/*", (req, res) => {
+  console.log("app.get(/*) called!");
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
+
 app.listen(process.env.PORT || 8000, () => {
 	console.log(`Server running on port ${process.env.PORT || 8000}`);
 });
