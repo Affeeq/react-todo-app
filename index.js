@@ -20,6 +20,15 @@ const { json, urlencoded } = express;
 const app = express();
 app.use(json());
 app.use(urlencoded({ extended: false }));
+
+if (process.env.NODE_ENV === "production") {
+  app.use((req, res, next) => {
+    if (req.header("x-forwarded-proto") !== "https")
+      res.redirect(`https://${req.header("host")}${req.url}`);
+    else next();
+  });
+}
+
 app.use("/api", router);
 
 app.use(express.static(path.join(__dirname, "client", "build")));
@@ -29,7 +38,5 @@ app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 
-app.listen(process.env.PORT || 8000, () => {
-	console.log(`Server running on port ${process.env.PORT || 8000}`);
-});
+
 module.exports = app;
